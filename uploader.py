@@ -1,5 +1,3 @@
-from selenium.webdriver.common.devtools.v85.dom import scroll_into_view_if_needed
-
 import brower_wrapper as bw
 import asyncio
 import keyword
@@ -19,9 +17,11 @@ def delete_file_if_exists(path):
         print(f"Deleted video: {path}")
 
 async def publish_random_video(b,db):
-    videos = db.get_videos_not_publish()
-    video = random.choice(videos)
-    await publish_video(video[1], b, db, video[0])
+# TODO
+    #videos = db.get_videos_not_publish()
+    #video = random.choice(videos)
+    #await publish_video(video[1], b, db, video[0])
+    return
 
 
 async def publish_videos(b,db):
@@ -71,7 +71,6 @@ async def publish_video(path,b,db,video_id):
             await sendButton.mouse_click()
 
     db.mark_video_posted(video_id)
-    delete_file_if_exists(path)
 
     await asyncio.sleep(10)
 
