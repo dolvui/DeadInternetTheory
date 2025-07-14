@@ -205,3 +205,12 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+
+#ya mes mots de passe et idee mdr
+secret.txt
+.session.dat
+.session_pixie_one.dat
+.session_pixie_two.dat
+videos.db
+singe_videos_ia.json
