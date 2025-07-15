@@ -1,22 +1,18 @@
-import brower_wrapper as bw
 import asyncio
-import keyword
-from bs4 import BeautifulSoup
 import os
-import requests
-import yt_dlp
-import random
-import sys
-import json
-import database
 from nodriver import cdp
+import asyncio
+import os
+
+from nodriver import cdp
+import globals
 
 def delete_file_if_exists(path):
     if os.path.exists(path):
         os.remove(path)
         print(f"Deleted video: {path}")
 
-async def publish_random_video(b,db):
+async def publish_random_video(b):
 # TODO
     #videos = db.get_videos_not_publish()
     #video = random.choice(videos)

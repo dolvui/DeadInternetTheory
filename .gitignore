@@ -209,9 +209,6 @@ __marimo__/
 
 #ya mes mots de passe et idee mdr
 secret.txt
-.session.dat
-.session_pixie_one.dat
-.session_pixie_two.dat
-videos.db
-monkey.db
+*.dat
+*.db
 singe_videos_ia.json

@@ -1,0 +1,12 @@
+{
+  "main" : "sessions\\.session.dat",
+  "pix_account" : ["sessions\\.session_pixie_one.dat",
+    "sessions\\.session_pixie_two.dat" ,
+    "sessions\\.session_pixie_three.dat" ],
+  "chrome_path" : "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+  "links" : {
+    "HOME_STUDIO" : "https://app.pixverse.ai/home",
+    "STUDIO" : "https://app.pixverse.ai/create/image-text"
+  },
+  "database" : "Databases\\monkey.db"
+}

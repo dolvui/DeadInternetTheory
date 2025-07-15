@@ -1,27 +1,21 @@
-import random
+import asyncio
+import json
 import traceback
 
-import brower_wrapper as bw
 import nodriver as uc
-from enum import Enum
 
-import scaper
-import gather
-import asyncio
-import database
-import uploader
-import tarantino
+import brower_wrapper as bw
 import monkeydb
+import tarantino
+import uploader
 
-COOKIE_FILE_NAME = ".session.dat"
-COOKIE_PIXIE_ONE = ".session_pixie_one.dat"
-COOKIE_PIXIE_TWO = ".session_pixie_two.dat"
+import globals
 
-db = monkeydb.monkeyDB()
+sessions_directory = "session\\"
 
 async def main_load_json(path):
     try:
-        db.fill_database_form_json(path)
+        globals.db.fill_database_form_json(path)
         print("json file loaded successfully !")
     except:
         traceback.print_exc()
@@ -41,13 +35,13 @@ async def main_create():
         traceback.print_exc()
 
 async def main_post():
-    b = bw.Browser("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",COOKIE_FILE_NAME)
+    b = bw.Browser(globals.SESSIONS_PATH["chrome_path"],globals.SESSIONS_PATH['main'])
     await b.init_browser()
     await b.load_cookies()
-    await uploader.publish_random_video(b,db)
+    await uploader.publish_random_video(b)
 
-async def main_register(session):
-    b = bw.Browser("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe", session)
+async def main_register(new_session):
+    b = bw.Browser(globals.SESSIONS_PATH["chrome_path"], sessions_directory + new_session)
     await b.init_browser()
     await b.load_cookies()
     await asyncio.sleep(120) # 2 min
@@ -63,21 +57,24 @@ if __name__ == "__main__":
     parser.add_argument('--post', required=False, help='TO post a video on tiktok')
     parser.add_argument('--create', required=False, help='create a new video')
     parser.add_argument('--register', required=False, help='You got 2 min to register on a account')
+    parser.add_argument('--sessions-path', required=True, help='path to a json that contains .dat files names')
 
     args = parser.parse_args()
 
-    if(args.post):
+    globals.init(args.sessions_path)
+
+    if args.post:
         print("Let's post a video !")
         uc.loop().run_until_complete(main_post())
-    if (args.pix_credit):
+    if args.pix_credit:
         print("let's retrieve some credit !")
         uc.loop().run_until_complete(main_credit())
-    if (args.load_json):
+    if args.load_json:
         print("let's load a json file !")
         uc.loop().run_until_complete(main_load_json(args.load_json))
-    if (args.create):
+    if args.create:
         print("let's create a new video !")
         uc.loop().run_until_complete(main_create())
-    if (args.register):
+    if args.register:
         print("let's register on a website!")
         uc.loop().run_until_complete(main_register(args.register))

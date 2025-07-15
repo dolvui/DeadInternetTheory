@@ -61,6 +61,31 @@ pip install -r requirements.txt
 
 ## ⚙️ Available Parameters
 
+### `--sessions-path`
+
+Load all needed values,paths and json files for the pass
+
+```bash
+python main.py --sessions-path="path/to/file.json"
+```
+
+**Expected JSON format:**
+
+```json
+{
+  "main" : "<path of the main session .dat>",
+  "pix_account" : ["<List of path to others accounts .dat>",...], 
+  "chrome_path" : "path\\to\\chrome.exe",
+  "links" : {
+    "HOME_STUDIO" : "<home of the website>",
+    "STUDIO" : "<creation page of the website>"
+  },
+  "database" : "path\\to\\database.db"
+}
+```
+
+---
+
 ### `--load-json`
 
 Load a list of prompts/videos into the internal database.
@@ -74,9 +99,9 @@ python main.py --load-json="path/to/file.json"
 ```json
 [
   {
-    "prompt": "aesthetic coffee in the rain",
-    "voix": "This video captures the peaceful rhythm of rainy mornings.",
-    "description": "☕ Rainy morning vibes #coffeetime #aesthetic"
+    "prompt": "<prompt for the IA>",
+    "voix": "<spoken text for the IA to be added>",
+    "description": "<description for social network>"
   },
   ...
 ]
@@ -133,13 +158,14 @@ You’ll have 2 minutes to log into your account. After that, the session cookie
 
 Here’s what’s implemented so far and what needs improvement:
 
-| Feature        | Status                                | Notes                                                  |
-|----------------|----------------------------------------|--------------------------------------------------------|
-| `--load-json`  | ✅ Working                             | Loads prompts/metadata into the DB                     |
-| `--pix-credit` | ✅ Working                             | Retrieves free daily generation credits                |
-| `--post`       | ⚠️ Was working, needs review          | Posting logic needs polish / maintenance               |
-| `--create`     | ⚠️ Not fully tested, seems functional | Needs robustness checks                                |
-| `--register`   | ✅ Working                             | Saves session cookies via manual login in browser      |
+| Feature           | Status                                | Notes                                             |
+|-------------------|----------------------------------------|---------------------------------------------------|
+| `--load-json`     | ✅ Working                             | Loads prompts/metadata into the DB                |
+| `--pix-credit`    | ✅ Working                             | Retrieves free daily generation credits           |
+| `--post`          | ⚠️ Was working, needs review          | Posting logic needs polish / maintenance          |
+| `--create`        | ⚠️ Not fully tested, seems functional | Needs robustness checks                           |
+| `--register`      | ✅ Working                             | Saves session cookies via manual login in browser |
+| `--sessions-path` | ✅ Working                             | Path to the json file ( requiere ! )              |
 
 ---
 

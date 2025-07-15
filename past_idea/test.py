@@ -9,7 +9,7 @@ import yt_dlp
 import random
 import sys
 
-COOKIE_FILE_NAME = ".session.dat"
+COOKIE_FILE_NAME = "../sessions/.session.dat"
 
 async def load_cookies(browser, page):
     try:

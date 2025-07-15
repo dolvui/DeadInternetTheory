@@ -3,7 +3,7 @@ import json
 from datetime import datetime
 
 class monkeyDB:
-    def __init__(self, path="monkey.db"):
+    def __init__(self, path):
         self.conn = sqlite3.connect(path)
         self._create_tables()
 

@@ -1,49 +1,27 @@
-from fontTools.varLib import set_default_weight_width_slant
+import asyncio
 
 import brower_wrapper as bw
-import asyncio
-import keyword
-from bs4 import BeautifulSoup
-import os
-import requests
-import yt_dlp
-import random
-import sys
-import json
-import database
-from datetime import datetime
+import globals
 
-chrome_path = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
-
-COOKIE_PIXIE_ONE = ".session_pixie_one.dat"
-COOKIE_PIXIE_TWO = ".session_pixie_two.dat"
-
-video_data = "singe_videos_ia.json"
-studio = "https://app.pixverse.ai/create/image-text"
-home_studio = "https://app.pixverse.ai/home"
 
 async def retrieve_credit():
-    b = bw.Browser(chrome_path,COOKIE_PIXIE_ONE)
+    data = globals.SESSIONS_PATH
+    for session in data["pix_account"]:
+        b = bw.Browser(globals.SESSIONS_PATH["chrome_path"],session)
+        await b.init_browser()
+        await b.load_cookies()
+        await asyncio.sleep(2)
+        await b.load_page(globals.SESSIONS_PATH["links"]["HOME_STUDIO"],5)
+        await b.save_cookies()
+        b.browser.stop()
+
+async def create_video(account = 0):
+    b = bw.Browser(globals.SESSIONS_PATH["chrome_path"],globals.SESSIONS_PATH["pix_account"][account])
     await b.init_browser()
     await b.load_cookies()
-    await b.load_page(home_studio,5)
-    await b.save_cookies()
-    b.browser.stop()
+    await b.load_page(globals.SESSIONS_PATH["links"]["HOME_STUDIO"], 5)
 
-    b2 = bw.Browser(chrome_path, COOKIE_PIXIE_TWO)
-    await b2.init_browser()
-    await b2.load_cookies()
-    await b2.load_page(home_studio, 30)
-    await b2.save_cookies()
-    b2.browser.stop()
-
-async def create_video(account = 1):
-    b = bw.Browser(chrome_path,COOKIE_PIXIE_ONE if account == 1 else COOKIE_PIXIE_TWO )
-    await b.init_browser()
-    await b.load_cookies()
-    await b.load_page(home_studio, 5)
-
-    await b.load_page(studio,5)
+    await b.load_page(globals.SESSIONS_PATH["links"]["STUDIO"],5)
     await b.current_page.fullscreen()
 
     await asyncio.sleep(5)

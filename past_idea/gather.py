@@ -1,8 +1,6 @@
-import brower_wrapper as bw
 from nodriver import Element
 import asyncio
 import random
-import json
 import database
 
 db = database.VideoDB()
