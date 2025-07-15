@@ -19,6 +19,16 @@ class monkeyDB:
                 videoPath TEXT default NULL
             )
         """)
+
+        c.execute("""
+                  CREATE TABLE IF NOT EXISTS account
+                  (
+                      id INTEGER PRIMARY KEY AUTOINCREMENT,
+                      session_path TEXT UNIQUE,
+                      credit INTEGER default 0
+                  )
+                  """)
+
         self.conn.commit()
 
     def add_idea_video(self, prompt, voix, description):
@@ -33,8 +43,8 @@ class monkeyDB:
 
     def get_not_posted_videos(self):
         c = self.conn.cursor()
-        c.execute("SELECT * FROM monkeys WHERE videoPath IS NOT NULL")
-        return c.fetchone() is not None
+        c.execute("SELECT * FROM monkeys WHERE videoPath IS NULL")
+        return c.fetchone()
 
     def fill_database_form_json(self,path):
         with open(path , 'r' , encoding='utf-8') as json_file:
@@ -42,3 +52,14 @@ class monkeyDB:
             for i in range(0,len(data)):
                 idea = data[i]
                 self.add_idea_video(idea['prompt'], idea['voix'], idea['description'])
+
+    def update_or_create_account(self,session_path,credit):
+        c = self.conn.cursor()
+        c.execute("INSERT INTO account (session_path, credit) VALUES (?, ?) ON CONFLICT(session_path) DO UPDATE SET credit = excluded.credit;",(session_path,credit))
+        self.conn.commit()
+
+    def find_sufficient_account(self):
+        needed_credit =  120
+        c = self.conn.cursor()
+        c.execute("SELECT session_path FROM account where credit >= ?",(needed_credit,))
+        return [str(row[0]) for row in c.fetchall()]

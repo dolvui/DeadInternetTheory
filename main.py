@@ -5,7 +5,7 @@ import traceback
 import nodriver as uc
 
 import brower_wrapper as bw
-import monkeydb
+import random
 import tarantino
 import uploader
 
@@ -29,7 +29,9 @@ async def main_credit():
 
 async def main_create():
     try:
-        await tarantino.create_video()
+        accounts = globals.db.find_sufficient_account()
+        account = random.choice(accounts)
+        await tarantino.create_video(account)
         print("video create successfully !")
     except:
         traceback.print_exc()
