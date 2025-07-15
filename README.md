@@ -63,7 +63,7 @@ pip install -r requirements.txt
 
 ### `--sessions-path`
 
-Load all needed values,paths and json files for the pass
+Load all necessary data, paths, sites, and JSON files for the script
 
 ```bash
 python main.py --sessions-path="path/to/file.json"
@@ -83,6 +83,9 @@ python main.py --sessions-path="path/to/file.json"
   "database" : "path\\to\\database.db"
 }
 ```
+> [!IMPORTANT]  
+> This is the only required parameter.  
+> Without it, nothing works, so make sure to specify it on every launch.
 
 ---
 
@@ -158,16 +161,36 @@ You’ll have 2 minutes to log into your account. After that, the session cookie
 
 Here’s what’s implemented so far and what needs improvement:
 
-| Feature           | Status                                | Notes                                             |
-|-------------------|----------------------------------------|---------------------------------------------------|
-| `--load-json`     | ✅ Working                             | Loads prompts/metadata into the DB                |
-| `--pix-credit`    | ✅ Working                             | Retrieves free daily generation credits           |
-| `--post`          | ⚠️ Was working, needs review          | Posting logic needs polish / maintenance          |
-| `--create`        | ⚠️ Not fully tested, seems functional | Needs robustness checks                           |
-| `--register`      | ✅ Working                             | Saves session cookies via manual login in browser |
-| `--sessions-path` | ✅ Working                             | Path to the json file ( requiere ! )              |
+| Feature                | Status                        | Notes                                             | Require |
+|------------------------|-------------------------------|---------------------------------------------------|---------|
+| `--load-json`          | ✅ Working                     | Loads prompts/metadata into the DB                |   ❌     |
+| `--pix-credit`         | ✅ Working                     | Retrieves free daily generation credits           |   ❌     |
+| `--post`               | ⚠️ Was working, needs review  | Posting logic needs polish / maintenance          |    ❌    |
+| `--create`             | ⚠️ Not fully tested           | create and download not finish yet                |   ❌     |
+| `--register`           | ✅ Working                     | Saves session cookies via manual login in browser |   ❌     |
+| `--sessions-path`      | ✅ Working                     | Path to the json file                             |   ✔️     |
 
 ---
+
+## 💡 Usage Advise
+
+### 🐧 Linux
+
+```bash
+#!/bin/bash
+
+echo "Hello world !" 
+```
+
+### 🖥️ Windows
+
+```PowerShell
+Write-Output "Hello World !"
+```
+
+### 🍎 Apple
+
+throw your mac to the trash
 
 ## 💬 Final Note
 

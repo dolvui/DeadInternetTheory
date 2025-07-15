@@ -4,6 +4,7 @@
     "sessions\\.session_pixie_two.dat" ,
     "sessions\\.session_pixie_three.dat" ],
   "chrome_path" : "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+  "social_post_path" : "https://www.tiktok.com/tiktokstudio/upload?from=webapp",
   "links" : {
     "HOME_STUDIO" : "https://app.pixverse.ai/home",
     "STUDIO" : "https://app.pixverse.ai/create/image-text"

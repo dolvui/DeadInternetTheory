@@ -26,35 +26,40 @@ async def create_video(account):
     await b.load_page(globals.SESSIONS_PATH["links"]["STUDIO"],5)
     await b.current_page.fullscreen()
 
-    await asyncio.sleep(5)
+    await asyncio.sleep(3)
 
-    duration = await b.current_page.find_elements_by_text('8s')
-    format = await b.current_page.find_elements_by_text('9:16')
-    res = await b.current_page.find_elements_by_text('360P')
+    duration = await b.current_page.find('8s',best_match=True)
+    format = await b.current_page.find('9:16',best_match=True)
+    res = await b.current_page.find('360P',best_match=True)
 
     switch = await b.current_page.select_all('button[role="switch"]')
 
-    await duration[1].mouse_click()
-    await format[0].mouse_click()
-    await res[0].mouse_click()
+    await duration.mouse_click()
+    await format.mouse_click()
+    await res.mouse_click()
 
     await switch[0].mouse_click()
     await switch[1].mouse_click()
 
-    not_posted = globals.db.get_not_posted_videos()
+    await asyncio.sleep(3)
+
+    not_posted = globals.db.get_not_generate_video()
 
     textbox_voix = await b.current_page.find_elements_by_text('Bonjour à tous')
     textbox_prompt = await b.current_page.find_elements_by_text('Décrivez le contenu que vous souhaitez créer')
     
-    await textbox_voix[1].mouse_click()  # Focus the field
+    await textbox_voix[1].mouse_click()
     await textbox_voix[1].send_keys(not_posted[2])
 
-    await textbox_prompt[1].mouse_click()  # Focus the field
+    await textbox_prompt[1].mouse_click()
     await textbox_prompt[1].send_keys(not_posted[1])
 
     await asyncio.sleep(1)
 
-    #TODO press creer !
+    create_button = await b.current_page.find('Créer', best_match=True)
+
+    # comment to not burn all credit during test
+    #create_button.mouse_click()
 
     while(await b.current_page.find_elements_by_text('en cours de generation')):
         await asyncio.sleep(1)

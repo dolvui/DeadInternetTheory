@@ -7,33 +7,23 @@ import os
 from nodriver import cdp
 import globals
 
-def delete_file_if_exists(path):
-    if os.path.exists(path):
-        os.remove(path)
-        print(f"Deleted video: {path}")
 
 async def publish_random_video(b):
-# TODO
-    #videos = db.get_videos_not_publish()
-    #video = random.choice(videos)
-    #await publish_video(video[1], b, db, video[0])
-    return
+    video = globals.db.get_generate_video()
 
+    if not video:
+        print("No new videos")
+    else:
+        await publish_video(b, video[0], video[4], video[5])
 
-async def publish_videos(b,db):
-    videos = db.get_videos_not_publish()
-    for video in videos:
-        await publish_video(video[1],b,db,video[0])
+async def publish_video(b,video_id,video_path,video_description):
 
-async def publish_video(path,b,db,video_id):
-    print(f"Starting for publishing video")
-
-    await b.load_page("https://www.tiktok.com/tiktokstudio/upload?from=webapp", 6)
+    await b.load_page(globals.SESSIONS_PATH["social_post_path"], 6)
 
     button = await b.current_page.find_elements_by_text('input[type="file"]');
 
     await asyncio.sleep(2)
-    #print(button)
+
     await button[0].send_file(path)
 
     await asyncio.sleep(2)
@@ -46,7 +36,7 @@ async def publish_video(path,b,db,video_id):
 
     await clear_text(b);
 
-    await textbox[1].send_keys("abonne toi #meme\n")
+    await textbox[1].send_keys(video_description)
 
     await asyncio.sleep(2)
 
@@ -66,8 +56,8 @@ async def publish_video(path,b,db,video_id):
 
             await sendButton.mouse_click()
 
-    db.mark_video_posted(video_id)
 
+    globals.db.mark_video_as_posted(video_id)
     await asyncio.sleep(10)
 
 

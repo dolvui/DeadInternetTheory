@@ -41,7 +41,12 @@ class monkeyDB:
         c.execute("UPDATE monkeys SET videoPath = ? WHERE id = ?", (path,id))
         self.conn.commit()
 
-    def get_not_posted_videos(self):
+    def get_generate_video(self):
+        c = self.conn.cursor()
+        c.execute("SELECT * FROM monkeys WHERE videoPath IS NOT NULL AND isPost IS FALSE")
+        return c.fetchone()
+
+    def get_not_generate_video(self):
         c = self.conn.cursor()
         c.execute("SELECT * FROM monkeys WHERE videoPath IS NULL")
         return c.fetchone()
@@ -63,3 +68,8 @@ class monkeyDB:
         c = self.conn.cursor()
         c.execute("SELECT session_path FROM account where credit >= ?",(needed_credit,))
         return [str(row[0]) for row in c.fetchall()]
+
+    def mark_video_as_posted(self,video_id):
+        c = self.conn.cursor()
+        c.execute("UPDATE monkeys SET isPost = TRUE WHERE id = ?", (video_id,))
+        self.conn.commit()
