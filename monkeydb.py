@@ -1,6 +1,5 @@
 import sqlite3
 import json
-from datetime import datetime
 
 class monkeyDB:
     def __init__(self, path):
@@ -16,7 +15,8 @@ class monkeyDB:
                 voix TEXT default NULL,
                 isPost BOOLEAN default False,
                 description TEXT default NULL,
-                videoPath TEXT default NULL
+                videoPath TEXT default NULL,
+                sound_design TEXT default NULL
             )
         """)
 
@@ -31,9 +31,9 @@ class monkeyDB:
 
         self.conn.commit()
 
-    def add_idea_video(self, prompt, voix, description):
+    def add_idea_video(self, prompt, voix, sound,description):
         c = self.conn.cursor()
-        c.execute("INSERT OR IGNORE INTO monkeys (prompt,voix,description) VALUES (?,?,?)", (prompt, voix, description))
+        c.execute("INSERT OR IGNORE INTO monkeys (prompt,voix,sound_design,description) VALUES (?,?,?,?)", (prompt, voix,sound, description))
         self.conn.commit()
 
     def add_genrerate_video(self,id,path):
@@ -56,7 +56,7 @@ class monkeyDB:
             data = json.load(json_file)
             for i in range(0,len(data)):
                 idea = data[i]
-                self.add_idea_video(idea['prompt'], idea['voix'], idea['description'])
+                self.add_idea_video(idea['prompt'], idea['voice'], idea['sound_ambience'],idea['description'])
 
     def update_or_create_account(self,session_path,credit):
         c = self.conn.cursor()
@@ -64,7 +64,7 @@ class monkeyDB:
         self.conn.commit()
 
     def find_sufficient_account(self):
-        needed_credit =  120
+        needed_credit =  60
         c = self.conn.cursor()
         c.execute("SELECT session_path FROM account where credit >= ?",(needed_credit,))
         return [str(row[0]) for row in c.fetchall()]
@@ -73,3 +73,11 @@ class monkeyDB:
         c = self.conn.cursor()
         c.execute("UPDATE monkeys SET isPost = TRUE WHERE id = ?", (video_id,))
         self.conn.commit()
+
+    def set_video_path(self,video_path,video_id):
+        c = self.conn.cursor()
+        c.execute("UPDATE monkeys SET videoPath = ? WHERE id = ?", (video_path,video_id))
+        self.conn.commit()
+
+    def update_account_credit(self,account,price):
+        c = self.conn.cursor()

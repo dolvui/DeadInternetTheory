@@ -124,10 +124,10 @@ python main.py --pix-credit=True
 
 ### `--create`
 
-Generate a video using an account and save it for future posting.
+Generate a video using an account and save it in the given path for future posting.
 
 ```bash
-python main.py --create=True
+python main.py --create="path\\to\\videos\\directory"
 ```
 
 ---
@@ -161,14 +161,14 @@ You’ll have 2 minutes to log into your account. After that, the session cookie
 
 Here’s what’s implemented so far and what needs improvement:
 
-| Feature                | Status                        | Notes                                             | Require |
-|------------------------|-------------------------------|---------------------------------------------------|---------|
-| `--load-json`          | ✅ Working                     | Loads prompts/metadata into the DB                |   ❌     |
-| `--pix-credit`         | ✅ Working                     | Retrieves free daily generation credits           |   ❌     |
-| `--post`               | ⚠️ Was working, needs review  | Posting logic needs polish / maintenance          |    ❌    |
-| `--create`             | ⚠️ Not fully tested           | create and download not finish yet                |   ❌     |
-| `--register`           | ✅ Working                     | Saves session cookies via manual login in browser |   ❌     |
-| `--sessions-path`      | ✅ Working                     | Path to the json file                             |   ✔️     |
+| Feature                | Status     | Notes                                             | Require |
+|------------------------|------------|---------------------------------------------------|---------|
+| `--load-json`          | ✅ Working  | Loads prompts/metadata into the DB                |   ❌     |
+| `--pix-credit`         | ✅ Working  | Retrieves free daily generation credits           |   ❌     |
+| `--post`               | ✅ Working  | Seems good for me, post on tiktok                 |    ❌    |
+| `--create`             | ✅ Working  | create and download in a directory 'videos'       |   ❌     |
+| `--register`           | ✅ Working  | Saves session cookies via manual login in browser |   ❌     |
+| `--sessions-path`      | ✅ Working  | Path to the json file                             |   ✔️     |
 
 ---
 

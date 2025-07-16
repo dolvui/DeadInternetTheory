@@ -1,53 +1,70 @@
 import asyncio
-import json
-import traceback
-
 import nodriver as uc
+import random
 
 import brower_wrapper as bw
-import random
 import tarantino
 import uploader
-
 import globals
 
-sessions_directory = "session\\"
+sessions_directory = "sessions\\"
 
 async def main_load_json(path):
     try:
         globals.db.fill_database_form_json(path)
         print("json file loaded successfully !")
-    except:
-        traceback.print_exc()
+        return 0
+    except Exception as e:
+        print(e)
+        return -1
 
 async def main_credit():
     try:
         await tarantino.retrieve_credit()
         print("credits retrieve successfully !")
-    except:
-        traceback.print_exc()
+        return 0
+    except Exception as e:
+        print(e)
+        return -1
 
-async def main_create():
+async def main_create(video_path):
     try:
         accounts = globals.db.find_sufficient_account()
-        account = random.choice(accounts)
-        await tarantino.create_video(account)
-        print("video create successfully !")
-    except:
-        traceback.print_exc()
+
+        if not accounts or len(accounts) == 0:
+            print("no accounts have sufficient credit !")
+            return 1
+        else:
+            account = random.choice(accounts)
+            await tarantino.create_video(account,video_path)
+            print("video create successfully !")
+            return 0
+    except Exception as e:
+        print(e)
+        return -1
 
 async def main_post():
-    b = bw.Browser(globals.SESSIONS_PATH["chrome_path"],globals.SESSIONS_PATH['main'])
-    await b.init_browser()
-    await b.load_cookies()
-    await uploader.publish_random_video(b)
+    try:
+        b = bw.Browser(globals.SESSIONS_PATH["chrome_path"],globals.SESSIONS_PATH['main'])
+        await b.init_browser()
+        await b.load_cookies()
+        await uploader.publish_random_video(b)
+        return 0
+    except Exception as e:
+        print(e)
+        return -1
 
 async def main_register(new_session):
-    b = bw.Browser(globals.SESSIONS_PATH["chrome_path"], sessions_directory + new_session)
-    await b.init_browser()
-    await b.load_cookies()
-    await asyncio.sleep(120) # 2 min
-    await b.save_cookies()
+    try:
+        new_path = sessions_directory + new_session
+        b = bw.Browser(globals.SESSIONS_PATH["chrome_path"], new_path)
+        await b.init_browser()
+        await asyncio.sleep(120) # 2 min
+        await b.save_cookies()
+        return 0
+    except Exception as e:
+        print(e)
+        return -1
 
 if __name__ == "__main__":
     import argparse
@@ -56,7 +73,7 @@ if __name__ == "__main__":
 
     parser.add_argument('--load-json', metavar='path', required=False,help='the path of a json file to load into db')
     parser.add_argument('--pix-credit', required=False, help='to retrieve credit form the IA site')
-    parser.add_argument('--post', required=False, help='TO post a video on tiktok')
+    parser.add_argument('--post', required=False, help='To post a video on tiktok')
     parser.add_argument('--create', required=False, help='create a new video')
     parser.add_argument('--register', required=False, help='You got 2 min to register on a account')
     parser.add_argument('--sessions-path', required=True, help='path to a json that contains .dat files names')
@@ -76,7 +93,7 @@ if __name__ == "__main__":
         uc.loop().run_until_complete(main_load_json(args.load_json))
     if args.create:
         print("let's create a new video !")
-        uc.loop().run_until_complete(main_create())
+        uc.loop().run_until_complete(main_create(args.create))
     if args.register:
         print("let's register on a website!")
         uc.loop().run_until_complete(main_register(args.register))

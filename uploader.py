@@ -1,10 +1,6 @@
 import asyncio
-import os
 from nodriver import cdp
-import asyncio
-import os
 
-from nodriver import cdp
 import globals
 
 
@@ -14,17 +10,17 @@ async def publish_random_video(b):
     if not video:
         print("No new videos")
     else:
-        await publish_video(b, video[0], video[4], video[5])
+        await publish_video(b, video[0], video[5], video[4])
 
 async def publish_video(b,video_id,video_path,video_description):
 
-    await b.load_page(globals.SESSIONS_PATH["social_post_path"], 6)
+    await b.load_page(globals.SESSIONS_PATH["social_post_path"], 15)
 
-    button = await b.current_page.find_elements_by_text('input[type="file"]');
+    button = await b.current_page.find_elements_by_text('input[type="file"]')
 
     await asyncio.sleep(2)
 
-    await button[0].send_file(path)
+    await button[0].send_file(video_path)
 
     await asyncio.sleep(2)
 
@@ -34,7 +30,7 @@ async def publish_video(b,video_id,video_path,video_description):
 
     await textbox[1].mouse_click()  # Focus the field
 
-    await clear_text(b);
+    await clear_text(b)
 
     await textbox[1].send_keys(video_description)
 
@@ -47,15 +43,14 @@ async def publish_video(b,video_id,video_path,video_description):
     sendButtons = await b.current_page.select_all('button[role="button"]')
 
     for sendButton in sendButtons:
-        if sendButton.text == "Publication":
+        if sendButton.text == "Publication" or sendButton.text == "Post":
             await asyncio.sleep(3)
 
             await sendButton.scroll_into_view()
 
-            await sendButton.click();
+            await sendButton.click()
 
             await sendButton.mouse_click()
-
 
     globals.db.mark_video_as_posted(video_id)
     await asyncio.sleep(10)

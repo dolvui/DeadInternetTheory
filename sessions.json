@@ -2,7 +2,9 @@
   "main" : "sessions\\.session.dat",
   "pix_account" : ["sessions\\.session_pixie_one.dat",
     "sessions\\.session_pixie_two.dat" ,
-    "sessions\\.session_pixie_three.dat" ],
+    "sessions\\.session_pixie_three.dat",
+    "sessions\\.session_pixie_four.dat",
+    "sessions\\.session_pixie_five.dat" ],
   "chrome_path" : "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
   "social_post_path" : "https://www.tiktok.com/tiktokstudio/upload?from=webapp",
   "links" : {

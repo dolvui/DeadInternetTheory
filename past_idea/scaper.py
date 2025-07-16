@@ -1,15 +1,9 @@
-import brower_wrapper as bw
-import asyncio
-import keyword
-from bs4 import BeautifulSoup
 import os
-import requests
-import yt_dlp
-import random
-import sys
-import json
-import database
 from datetime import datetime
+
+import yt_dlp
+from bs4 import BeautifulSoup
+
 
 def download_video(url,var ,db,save_path="C:"):
     headers = {
