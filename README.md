@@ -174,6 +174,8 @@ Here’s what’s implemented so far and what needs improvement:
 
 ## 💡 Usage Advise
 
+To automate, so no human action is needed :
+
 ### 🐧 Linux
 
 ```bash
@@ -184,13 +186,62 @@ echo "Hello world !"
 
 ### 🖥️ Windows
 
-```PowerShell
-Write-Output "Hello World !"
+Here the base action needed, adapt to your case
+
+Retrieve credit is the example chosen
+
+#### Step 1
+
+Prepare your Environment, open a Powershell in `C:\...\...\DeadInternetTheory\`
+
+```Powershell
+python -m venv venv
+.\venv\Scripts\activate
+pip install -r requirements.txt
 ```
+
+#### Step 2
+
+Create a file `auto.bat` in `C:\...\...\DeadInternetTheory\`
+
+so
+`C:\...\...\DeadInternetTheory\auto.bat`
+
+```bat
+@echo off
+cd /d C:\...\...\DeadInternetTheory\
+call venv\Scripts\activate.bat
+python main.py --sessions-path="sessions.json" --load-json="./idea.json"
+```
+
+#### Step 3
+
+- Press `Win` + `S`, search Task Scheduler.
+- Click Create Basic Task.
+- Name: Run Script at 9AM.
+- Trigger: Daily, time: 09:00.
+- Action: Start a program → Browse to your auto.bat.
+
+Finish.
 
 ### 🍎 Apple
 
 throw your mac to the trash
+
+---
+
+## 🐞 Bugs  🤨
+
+> [!WARNING]  
+> When creating a video, the page switches to fullscreen.  
+> **However**, if you're on a laptop with a small screen, some elements might not be visible, which can cause the script to fail (`element is of type None`).  
+> On a larger screen, everything works fine.  
+>  
+> I could patch this by calling `scroll_into_view()` on each element...  
+> But honestly? *Too lazy for now.*
+
+
+---
 
 ## 💬 Final Note
 

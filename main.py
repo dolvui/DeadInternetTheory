@@ -75,7 +75,7 @@ if __name__ == "__main__":
     parser.add_argument('--pix-credit', required=False, help='to retrieve credit form the IA site')
     parser.add_argument('--post', required=False, help='To post a video on tiktok')
     parser.add_argument('--create', required=False, help='create a new video')
-    parser.add_argument('--credit', required=False, help='select credity plan')
+    parser.add_argument('--credit', required=False, help='select credit plan')
     parser.add_argument('--register', required=False, help='You got 2 min to register on a account')
     parser.add_argument('--sessions-path', required=True, help='path to a json that contains .dat files names')
 

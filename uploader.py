@@ -14,7 +14,8 @@ async def publish_random_video(b):
 
 async def publish_video(b,video_id,video_path,video_description):
 
-    await b.load_page(globals.SESSIONS_PATH["social_post_path"], 15)
+    await b.load_page(globals.SESSIONS_PATH["social_post_path"], 7)
+    #await b.current_page.fullscreen()
 
     button = await b.current_page.find_elements_by_text('input[type="file"]')
 
@@ -40,17 +41,9 @@ async def publish_video(b,video_id,video_path,video_description):
         expression="window.scrollTo(0, document.body.scrollHeight)"
     ))
 
-    sendButtons = await b.current_page.select_all('button[role="button"]')
-
-    for sendButton in sendButtons:
-        if sendButton.text == "Publication" or sendButton.text == "Post":
-            await asyncio.sleep(3)
-
-            await sendButton.scroll_into_view()
-
-            await sendButton.click()
-
-            await sendButton.mouse_click()
+    sendButtons = await b.current_page.find('Publier',best_match=True)
+    await sendButtons.scroll_into_view()
+    await sendButtons.click()
 
     globals.db.mark_video_as_posted(video_id)
     await asyncio.sleep(10)
