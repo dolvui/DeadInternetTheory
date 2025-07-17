@@ -63,8 +63,7 @@ class monkeyDB:
         c.execute("INSERT INTO account (session_path, credit) VALUES (?, ?) ON CONFLICT(session_path) DO UPDATE SET credit = excluded.credit;",(session_path,credit))
         self.conn.commit()
 
-    def find_sufficient_account(self):
-        needed_credit =  60
+    def find_sufficient_account(self,needed_credit):
         c = self.conn.cursor()
         c.execute("SELECT session_path FROM account where credit >= ?",(needed_credit,))
         return [str(row[0]) for row in c.fetchall()]

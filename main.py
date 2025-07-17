@@ -27,9 +27,9 @@ async def main_credit():
         print(e)
         return -1
 
-async def main_create(video_path):
+async def main_create(video_path,credit = 60):
     try:
-        accounts = globals.db.find_sufficient_account()
+        accounts = globals.db.find_sufficient_account(credit)
 
         if not accounts or len(accounts) == 0:
             print("no accounts have sufficient credit !")
@@ -75,6 +75,7 @@ if __name__ == "__main__":
     parser.add_argument('--pix-credit', required=False, help='to retrieve credit form the IA site')
     parser.add_argument('--post', required=False, help='To post a video on tiktok')
     parser.add_argument('--create', required=False, help='create a new video')
+    parser.add_argument('--credit', required=False, help='select credity plan')
     parser.add_argument('--register', required=False, help='You got 2 min to register on a account')
     parser.add_argument('--sessions-path', required=True, help='path to a json that contains .dat files names')
 
@@ -93,7 +94,10 @@ if __name__ == "__main__":
         uc.loop().run_until_complete(main_load_json(args.load_json))
     if args.create:
         print("let's create a new video !")
-        uc.loop().run_until_complete(main_create(args.create))
+        if args.credit:
+            uc.loop().run_until_complete(main_create(args.create,int(args.credit)))
+        else:
+            uc.loop().run_until_complete(main_create(args.create))
     if args.register:
         print("let's register on a website!")
         uc.loop().run_until_complete(main_register(args.register))

@@ -10,7 +10,6 @@ import globals
 async def retrieve_credit():
     data = globals.SESSIONS_PATH
     for session in data["pix_account"]:
-
         b = bw.Browser(globals.SESSIONS_PATH["chrome_path"],session)
         await b.init_browser()
         await b.load_cookies()
@@ -88,7 +87,10 @@ async def create_video(account,video_path):
     links = await b.current_page.find_elements_by_text('.mp4')
     await download_video(links[0].src,video_path,not_posted[0])
 
-    #globals.db.update_account_credit(account,60)
+    await b.load_page(globals.SESSIONS_PATH["links"]["HOME_STUDIO"], 5)
+    credit = await b.current_page.select('span[class="text-text-credit"]')
+    globals.db.update_or_create_account(account, int(credit.text))
+    await b.save_cookies()
 
 async def download_video(url,save_path,video_id):
 
