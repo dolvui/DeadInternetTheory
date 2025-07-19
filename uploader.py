@@ -1,8 +1,11 @@
 import asyncio
 from nodriver import cdp
+import logging
 
 import globals
 
+logger = logging.getLogger(__name__)
+logging.basicConfig(filename='logs.log', encoding='utf-8', level=logging.DEBUG)
 
 async def publish_random_video(b):
     video = globals.db.get_generate_video()
@@ -44,6 +47,13 @@ async def publish_video(b,video_id,video_path,video_description):
     sendButtons = await b.current_page.find('Publier',best_match=True)
     await sendButtons.scroll_into_view()
     await sendButtons.click()
+
+    await asyncio.sleep(2)
+
+    maintenent = await b.current_page.find('Publier maintenant', best_match=True)
+
+    if maintenent:
+        await maintenent.click()
 
     globals.db.mark_video_as_posted(video_id)
     await asyncio.sleep(10)

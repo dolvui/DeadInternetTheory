@@ -1,6 +1,7 @@
 import asyncio
 import nodriver as uc
 import random
+import logging
 
 import brower_wrapper as bw
 import tarantino
@@ -8,6 +9,9 @@ import uploader
 import globals
 
 sessions_directory = "sessions\\"
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(filename='logs.log', encoding='utf-8', level=logging.DEBUG)
 
 async def main_load_json(path):
     try:
@@ -68,6 +72,10 @@ async def main_register(new_session):
 
 if __name__ == "__main__":
     import argparse
+    from datetime import datetime
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    logger.info("Starting program at: " + timestamp)
 
     parser = argparse.ArgumentParser(description='select which action need to make')
 
@@ -85,19 +93,24 @@ if __name__ == "__main__":
 
     if args.post:
         print("Let's post a video !")
+        logger.info(f"call with post {args.post}")
         uc.loop().run_until_complete(main_post())
     if args.pix_credit:
         print("let's retrieve some credit !")
+        logger.info(f"call with pix_credit {args.pix_credit}")
         uc.loop().run_until_complete(main_credit())
     if args.load_json:
+        logger.info(f"call with load_json {args.load_json}")
         print("let's load a json file !")
         uc.loop().run_until_complete(main_load_json(args.load_json))
     if args.create:
+        logger.info(f"call with create {args.create}")
         print("let's create a new video !")
         if args.credit:
             uc.loop().run_until_complete(main_create(args.create,int(args.credit)))
         else:
             uc.loop().run_until_complete(main_create(args.create))
     if args.register:
+        logger.info(f"call with register {args.register}")
         print("let's register on a website!")
         uc.loop().run_until_complete(main_register(args.register))

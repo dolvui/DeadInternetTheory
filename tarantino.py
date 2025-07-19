@@ -1,11 +1,38 @@
 import asyncio
+import random
 from datetime import datetime
 import yt_dlp
 import os
+import logging
 
 import brower_wrapper as bw
 import globals
 
+logger = logging.getLogger(__name__)
+logging.basicConfig(filename='logs.log', encoding='utf-8', level=logging.DEBUG)
+
+mov_dict = {
+    1 : "Horizontal gauche",
+    2 : "Horizontal droite",
+    3: "Vertical haut",
+    4: "Vertical bas",
+    5: "Montée en Grue",
+    6: "Dolly Zoom",
+    7: "Zoom avant",
+    8: "Zoom arrière",
+    9: "Zoom Avant Rapide",
+    10: "Zoom Arrière Rapide",
+    11 : "Zoom Avant Progressif",
+    12 : "Super Dolly Arrière",
+    13: "Prise de Vue de Suivi Gauche",
+    14: "Prise de Vue de Suivi Droite",
+    15: "Prise de Vue en Arc Gauche",
+    16: "Plan en arc droit",
+    17: "Prise de Vue Fixe",
+    18: "Angle de Caméra",
+    19: "Bras Robotique",
+    20: "Whip Pan",
+}
 
 async def retrieve_credit():
     data = globals.SESSIONS_PATH
@@ -61,6 +88,13 @@ async def create_video(account,video_path):
     await textbox_prompt[1].mouse_click()
     await textbox_prompt[1].send_keys(not_posted[1])
 
+    mov = await b.current_page.find('Mouvement de Caméra',best_match=True)
+    await mov.mouse_click()
+
+    mov_effect = await b.current_page.find(mov_dict[random.randint(1,len(mov_dict))],best_match=True)
+    await mov_effect.scroll_into_view()
+    await mov_effect.mouse_click()
+
     await asyncio.sleep(1)
 
     create_button = await b.current_page.find('Créer', best_match=True)
@@ -70,6 +104,14 @@ async def create_video(account,video_path):
 
     print("wait 10 sec")
     await asyncio.sleep(10)
+
+    wait = await b.current_page.find('En file d\'attente', best_match=True)
+    while wait:
+        try:
+            wait = await b.current_page.find('En file d\'attente', best_match=True)
+        except Exception as e:
+            print(e)
+        await asyncio.sleep(1)
 
     new_video = await b.current_page.find('Votre vidéo est en cours de génération',best_match=True)
     position = None
