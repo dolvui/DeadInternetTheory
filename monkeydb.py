@@ -29,6 +29,17 @@ class monkeyDB:
                   )
                   """)
 
+        c.execute("""
+                  CREATE TABLE IF NOT EXISTS videoVeo
+                  (
+                      id INTEGER PRIMARY KEY AUTOINCREMENT,
+                      prompt TEXT UNIQUE,
+                      description TEXT,
+                      isPost BOOLEAN default False,
+                      videoPath TEXT default NULL,
+                  )
+                  """)
+
         self.conn.commit()
 
     def add_idea_video(self, prompt, voix, sound,description):
@@ -80,3 +91,44 @@ class monkeyDB:
 
     def update_account_credit(self,account,price):
         c = self.conn.cursor()
+
+
+    # ------------------------ for VEO ----------------------------------------------
+
+    def add_idea_video_veo(self, prompt, voix, sound, description):
+        c = self.conn.cursor()
+        c.execute("INSERT OR IGNORE INTO videoVeo (prompt,description) VALUES (?,?)",
+                  (prompt, voix, sound, description))
+        self.conn.commit()
+
+    def add_genrerate_video_veo(self, id, path):
+        c = self.conn.cursor()
+        c.execute("UPDATE videoVeo SET videoPath = ? WHERE id = ?", (path, id))
+        self.conn.commit()
+
+    def get_generate_video_veo(self):
+        c = self.conn.cursor()
+        c.execute("SELECT * FROM videoVeo WHERE videoPath IS NOT NULL AND isPost IS FALSE")
+        return c.fetchone()
+
+    def get_not_generate_video_veo(self):
+        c = self.conn.cursor()
+        c.execute("SELECT * FROM videoVeo WHERE videoPath IS NULL")
+        return c.fetchone()
+
+    def fill_database_form_json_veo(self, path):
+        with open(path, 'r', encoding='utf-8') as json_file:
+            data = json.load(json_file)
+            for i in range(0, len(data)):
+                idea = data[i]
+                self.add_idea_video(idea['prompt'], idea['description'])
+
+    def mark_video_as_posted(self, video_id):
+        c = self.conn.cursor()
+        c.execute("UPDATE videoVeo SET isPost = TRUE WHERE id = ?", (video_id,))
+        self.conn.commit()
+
+    def set_video_path(self, video_path, video_id):
+        c = self.conn.cursor()
+        c.execute("UPDATE videoVeo SET videoPath = ? WHERE id = ?", (video_path, video_id))
+        self.conn.commit()

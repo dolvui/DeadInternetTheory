@@ -211,3 +211,6 @@ __marimo__/
 secret.txt
 *.dat
 *.db
+prompt-gpt/prompt_veo3.txt
+automate/*.bat
+videos/*.mp4
