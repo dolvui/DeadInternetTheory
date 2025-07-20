@@ -36,7 +36,7 @@ class monkeyDB:
                       prompt TEXT UNIQUE,
                       description TEXT,
                       isPost BOOLEAN default False,
-                      videoPath TEXT default NULL,
+                      videoPath TEXT default NULL
                   )
                   """)
 
@@ -123,12 +123,12 @@ class monkeyDB:
                 idea = data[i]
                 self.add_idea_video(idea['prompt'], idea['description'])
 
-    def mark_video_as_posted(self, video_id):
+    def mark_video_as_posted_veo(self, video_id):
         c = self.conn.cursor()
         c.execute("UPDATE videoVeo SET isPost = TRUE WHERE id = ?", (video_id,))
         self.conn.commit()
 
-    def set_video_path(self, video_path, video_id):
+    def set_video_path_veo(self, video_path, video_id):
         c = self.conn.cursor()
         c.execute("UPDATE videoVeo SET videoPath = ? WHERE id = ?", (video_path, video_id))
         self.conn.commit()
